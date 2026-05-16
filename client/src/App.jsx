@@ -66,13 +66,7 @@ export default function App() {
         </div>
         
         <div className="flex items-center gap-4">
-          <button className="p-2 hover:bg-white/5 rounded-full transition-colors relative">
-            <Bell size={20} />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-background"></span>
-          </button>
-          <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
-            <Menu size={20} />
-          </button>
+          
         </div>
       </nav>
 
@@ -89,12 +83,7 @@ export default function App() {
           </div>
           
           <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg font-medium transition-all shadow-lg shadow-blue-500/20">
-              <Share2 size={16} /> Share
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg font-medium transition-all">
-              <Info size={16} /> Match Info
-            </button>
+           
           </div>
         </div>
 
@@ -145,10 +134,7 @@ export default function App() {
                   Momentum Timeline
                 </h3>
               </TermExplainer>
-              <select className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs outline-none">
-                <option>Full Match</option>
-                <option>Last 10 Overs</option>
-              </select>
+              
             </div>
             <div className="flex-1 w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">

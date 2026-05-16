@@ -131,9 +131,7 @@ export default function AISummary({ matchData }) {
       {/* Social Footer */}
       <div className="px-6 py-3 bg-blue-500/5 border-t border-white/5 flex items-center justify-between">
         <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Live Commentary Stream</span>
-        <button className="flex items-center gap-1.5 text-[10px] font-bold hover:text-blue-400 transition-colors uppercase">
-          <Share2 size={12} /> Share Summary
-        </button>
+        
       </div>
     </div>
   );
