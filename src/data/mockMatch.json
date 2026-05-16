@@ -1,46 +1,48 @@
 {
   "matchInfo": {
-    "title": "World Cup Final 2026",
+    "title": "IPL 2024: KKR vs GT",
     "teams": {
       "batting": {
-        "name": "India",
-        "shortName": "IND",
-        "score": 284,
+        "name": "Kolkata Knight Riders",
+        "shortName": "KKR",
+        "score": 182,
         "wickets": 4,
-        "overs": 42.4
+        "overs": 17.2,
+        "color": "#3A225D"
       },
       "bowling": {
-        "name": "Australia",
-        "shortName": "AUS",
-        "score": 281,
+        "name": "Gujarat Titans",
+        "shortName": "GT",
+        "score": 178,
         "wickets": 10,
-        "overs": 50.0
+        "overs": 20.0,
+        "color": "#1B2133"
       }
     },
-    "status": "India needs 2 runs from 44 balls",
+    "status": "KKR needs 15 runs from 16 balls",
     "winProbability": {
-      "batting": 94,
-      "bowling": 6
+      "batting": 78,
+      "bowling": 22
     }
   },
   "liveStats": {
-    "currentRunRate": 6.66,
-    "requiredRunRate": 0.27,
-    "lastFiveOvers": [8, 12, 15, 6, 9],
+    "currentRunRate": 10.5,
+    "requiredRunRate": 5.63,
+    "lastFiveOvers": [12, 18, 14, 9, 22],
     "boundaries": {
-      "fours": 24,
-      "sixes": 8
+      "fours": 18,
+      "sixes": 12
     }
   },
   "momentumTimeline": [
-    { "over": 10, "score": 62, "wickets": 1, "momentum": 60, "event": "Aggressive Start" },
-    { "over": 20, "score": 115, "wickets": 2, "momentum": 45, "event": "Spinners tight" },
-    { "over": 30, "score": 185, "wickets": 3, "momentum": 85, "event": "Kohli Century" },
-    { "over": 40, "score": 268, "wickets": 4, "momentum": 75, "event": "Final Push" }
+    { "over": 5, "score": 45, "wickets": 1, "momentum": 55, "event": "Narine Blitz" },
+    { "over": 10, "score": 92, "wickets": 2, "momentum": 40, "event": "Rashid tightens" },
+    { "over": 15, "score": 154, "wickets": 3, "momentum": 90, "event": "Russell Storm" },
+    { "over": 17, "score": 180, "wickets": 4, "momentum": 85, "event": "Rinku Finishing" }
   ],
   "aiInsights": [
-    "The batting side regained momentum in the last five overs through aggressive boundary hitting.",
-    "Australia's spin attack has struggled to contain the middle order on this surface.",
-    "A partnership of 84 runs between Kohli and Rahul has shifted the win probability significantly in India's favor."
+    "Andre Russell's 42 off 15 balls has turned the match on its head at the Eden Gardens.",
+    "Rashid Khan was the only bowler who managed to keep the run rate under control during the middle overs.",
+    "The momentum shifted decisively towards KKR in the 16th over where they picked up 22 runs."
   ]
 }

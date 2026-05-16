@@ -3,6 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Activity, Zap, TrendingUp, Info, Menu, Share2, Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import mockData from './data/mockMatch.json';
+import AIInsightModal from './components/AIInsightModal';
 
 const GlassCard = ({ children, className = "" }) => (
   <motion.div 
@@ -28,6 +29,7 @@ const StatBadge = ({ icon: Icon, label, value, color = "text-blue-400" }) => (
 
 export default function App() {
   const [data, setData] = useState(mockData);
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen text-slate-100 font-sans selection:bg-blue-500/30">
@@ -59,7 +61,7 @@ export default function App() {
           <div>
             <div className="flex items-center gap-2 text-blue-400 mb-1">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-              <span className="text-xs font-bold uppercase tracking-widest">Live Now</span>
+              <span className="text-xs font-bold uppercase tracking-widest">IPL 2024 • LIVE</span>
             </div>
             <h2 className="text-3xl font-extrabold">{data.matchInfo.title}</h2>
             <p className="text-muted-foreground">{data.matchInfo.status}</p>
@@ -77,10 +79,11 @@ export default function App() {
 
         {/* Top Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <GlassCard className="flex flex-col justify-center">
+          <GlassCard className="flex flex-col justify-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#3A225D]"></div>
             <div className="flex justify-between items-end">
               <div>
-                <p className="text-sm text-muted-foreground mb-1 uppercase tracking-wider">{data.matchInfo.teams.batting.name}</p>
+                <p className="text-sm text-muted-foreground mb-1 uppercase tracking-wider">{data.matchInfo.teams.batting.shortName}</p>
                 <h3 className="text-4xl font-black">
                   {data.matchInfo.teams.batting.score}/
                   <span className="text-blue-400">{data.matchInfo.teams.batting.wickets}</span>
@@ -92,7 +95,7 @@ export default function App() {
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: '85%' }}
-                className="h-full bg-blue-500"
+                className="h-full bg-gradient-to-r from-[#3A225D] to-[#74448B]"
               />
             </div>
           </GlassCard>
@@ -177,12 +180,21 @@ export default function App() {
               </AnimatePresence>
             </div>
             
-            <button className="w-full mt-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+            <button 
+              onClick={() => setIsAIModalOpen(true)}
+              className="w-full mt-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            >
               Generate Deep Dive
             </button>
           </GlassCard>
         </div>
       </main>
+
+      <AIInsightModal 
+        isOpen={isAIModalOpen} 
+        onClose={() => setIsAIModalOpen(false)} 
+        matchData={data.matchInfo}
+      />
     </div>
   );
 }
