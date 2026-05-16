@@ -20,6 +20,12 @@ app.get('/api/insights', (req, res) => {
   res.json(insights);
 });
 
+// AI Summaries Route
+app.get('/api/summaries', (req, res) => {
+  const summaries = require('./data/aiSummaries.json');
+  res.json(summaries);
+});
+
 app.listen(PORT, () => {
   console.log(`CricBrain Server running on port ${PORT}`);
 });

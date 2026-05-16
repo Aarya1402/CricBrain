@@ -7,19 +7,35 @@ export default function AISummary({ matchData }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [summary, setSummary] = useState('');
   const [vibe, setVibe] = useState('analyst'); // 'analyst' or 'fanatic'
+  const [allSummaries, setAllSummaries] = useState(summariesData);
 
-  const generateSummary = (currentVibe = vibe) => {
+  useEffect(() => {
+    const fetchSummaries = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/summaries');
+        const json = await response.json();
+        setAllSummaries(json);
+      } catch (error) {
+        console.error("Error fetching summaries:", error);
+      }
+    };
+    fetchSummaries();
+  }, []);
+
+  const generateSummary = (currentVibe = vibe, data = allSummaries) => {
     setIsGenerating(true);
     setTimeout(() => {
-      const currentSummaries = summariesData[currentVibe];
+      const currentSummaries = data[currentVibe];
       setSummary(currentSummaries[Math.floor(Math.random() * currentSummaries.length)]);
       setIsGenerating(false);
     }, 1500);
   };
 
   useEffect(() => {
-    generateSummary();
-  }, []);
+    if (allSummaries) {
+      generateSummary(vibe, allSummaries);
+    }
+  }, [allSummaries]);
 
   const handleVibeChange = (newVibe) => {
     setVibe(newVibe);

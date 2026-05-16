@@ -21,6 +21,20 @@ const TypewriterText = ({ text, delay = 20 }) => {
 
 export default function AIInsightModal({ isOpen, onClose, matchData }) {
   const [isGenerating, setIsGenerating] = useState(true);
+  const [allInsights, setAllInsights] = useState(insightsData);
+
+  useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/insights');
+        const json = await response.json();
+        setAllInsights(json);
+      } catch (error) {
+        console.error("Error fetching insights:", error);
+      }
+    };
+    fetchInsights();
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -30,7 +44,7 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
     }
   }, [isOpen]);
 
-  const insights = insightsData.insights.map(item => ({
+  const insights = allInsights.insights.map(item => ({
     ...item,
     icon: item.type === 'momentum' ? TrendingUp : Target,
     content: item.content.replace('{winProb}', matchData.winProbability.batting)
@@ -112,7 +126,7 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
                   >
                     <p className="text-xs text-blue-400 font-bold mb-2 uppercase tracking-tighter italic">AI Verdict</p>
                     <p className="text-sm italic text-slate-400">
-                      "{insightsData.verdict}"
+                      "{allInsights.verdict}"
                     </p>
                   </motion.div>
                 </div>
