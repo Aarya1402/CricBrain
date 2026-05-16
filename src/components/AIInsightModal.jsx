@@ -70,7 +70,7 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
                 <div className="p-2 bg-blue-500/20 rounded-lg">
                   <Sparkles className="text-blue-400" size={20} />
                 </div>
-                <h2 className="text-xl font-bold tracking-tight">Criclytics AI Deep Dive</h2>
+                <h2 className="text-xl font-bold tracking-tight">CricBrain AI Deep Dive</h2>
               </div>
               <button 
                 onClick={onClose}

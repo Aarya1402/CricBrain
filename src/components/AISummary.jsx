@@ -55,7 +55,7 @@ export default function AISummary({ matchData }) {
               className="flex items-center gap-3 text-blue-400/60"
             >
               <Sparkles className="animate-pulse" size={20} />
-              <p className="text-sm font-medium animate-pulse italic">Criclytics AI is processing match dynamics...</p>
+              <p className="text-sm font-medium animate-pulse italic">CricBrain AI is processing match dynamics...</p>
             </motion.div>
           ) : (
             <motion.div

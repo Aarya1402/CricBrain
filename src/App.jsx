@@ -43,7 +43,7 @@ export default function App() {
             <Activity className="text-white" size={20} />
           </div>
           <h1 className="text-xl font-bold tracking-tight">
-            CRICLYTICS <span className="text-blue-400">AI</span>
+            CRIC<span className="text-blue-400">BRAIN</span>
           </h1>
         </div>
         
