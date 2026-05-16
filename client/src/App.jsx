@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Activity, Zap, TrendingUp, Info, Menu, Share2, Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import mockData from './data/mockMatch.json';
 import AIInsightModal from './components/AIInsightModal';
 import TermExplainer from './components/TermExplainer';
 import PlayerCard from './components/PlayerCard';
 import AISummary from './components/AISummary';
+import { useMatchData } from './hooks/useMatchData';
 
 const GlassCard = ({ children, className = "" }) => (
   <motion.div 
@@ -31,21 +31,8 @@ const StatBadge = ({ icon: Icon, label, value, color = "text-blue-400" }) => (
 );
 
 export default function App() {
-  const [data, setData] = useState(mockData);
+  const { data, loading } = useMatchData();
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchMatchData = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/match-data');
-        const json = await response.json();
-        setData(json);
-      } catch (error) {
-        console.error("Error fetching match data:", error);
-      }
-    };
-    fetchMatchData();
-  }, []);
 
   return (
     <div className="min-h-screen text-slate-100 font-sans selection:bg-blue-500/30">

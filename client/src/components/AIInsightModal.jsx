@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Brain, TrendingUp, Target } from 'lucide-react';
+import { matchApi } from '../api';
 import insightsData from '../data/aiInsights.json';
 
 const TypewriterText = ({ text, delay = 20 }) => {
@@ -28,13 +29,8 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
       if (!isOpen) return;
       setIsGenerating(true);
       try {
-        const response = await fetch('http://localhost:5000/api/ai/insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ context: matchData })
-        });
-        const json = await response.json();
-        setAllInsights(json);
+        const response = await matchApi.generateAIInsights(matchData);
+        setAllInsights(response.data);
       } catch (error) {
         console.error("Error fetching insights:", error);
       } finally {

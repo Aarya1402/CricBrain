@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, RefreshCw, Volume2, Share2, Sparkles } from 'lucide-react';
+import { matchApi } from '../api';
 import summariesData from '../data/aiSummaries.json';
 
 export default function AISummary({ matchData }) {
@@ -12,9 +13,8 @@ export default function AISummary({ matchData }) {
   useEffect(() => {
     const fetchSummaries = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/summaries');
-        const json = await response.json();
-        setAllSummaries(json);
+        const response = await matchApi.getSummaries();
+        setAllSummaries(response.data);
       } catch (error) {
         console.error("Error fetching summaries:", error);
       }
@@ -25,19 +25,10 @@ export default function AISummary({ matchData }) {
   const generateSummary = async (currentVibe = vibe) => {
     setIsGenerating(true);
     try {
-      const response = await fetch('http://localhost:5000/api/ai/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          vibe: currentVibe,
-          context: matchData 
-        })
-      });
-      const json = await response.json();
-      setSummary(json.text);
+      const response = await matchApi.generateAICommentary(currentVibe, matchData);
+      setSummary(response.data.text);
     } catch (error) {
       console.error("Error generating AI summary:", error);
-      // Local fallback if server fails
       const currentSummaries = allSummaries[currentVibe];
       setSummary(currentSummaries[Math.floor(Math.random() * currentSummaries.length)]);
     } finally {
