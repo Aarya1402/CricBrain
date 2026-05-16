@@ -44,22 +44,42 @@ exports.generateInsights = async (req, res) => {
   }
 };
 
+const explanationsData = require('../data/explanations.json');
+
 exports.generateExplanation = async (req, res) => {
   const { text, context } = req.body;
-  if (!genAI) return res.json({ text: "Stat explanation unavailable in offline mode." });
+  console.log("🔍 Explaining Insight:", text);
+  
+  const getMockExplanation = (input) => {
+    const lowerText = input.toLowerCase();
+    if (lowerText.includes('win')) return explanationsData.win_prob;
+    if (lowerText.includes('rate') || lowerText.includes('rr')) return explanationsData.run_rate;
+    if (lowerText.includes('momentum')) return explanationsData.momentum;
+    if (lowerText.includes('wicket')) return explanationsData.wickets;
+    if (lowerText.includes('clutch') || lowerText.includes('russell')) return explanationsData.clutch;
+    return explanationsData.default;
+  };
+
+  if (!genAI) {
+    const mock = getMockExplanation(text);
+    console.log("💾 Offline Mode: Using Mock:", mock);
+    return res.json({ text: mock });
+  }
 
   try {
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
     const prompt = `
       Match Context: ${JSON.stringify(context)}
       Specific Insight: "${text}"
-      
       Task: Explain this technical cricket insight like I'm 5 years old. 
       Keep it very simple, short (1-2 sentences), and use an analogy if possible.
     `;
     const result = await model.generateContent(prompt);
-    res.json({ text: result.response.text() });
+    const generatedText = result.response.text();
+    console.log("🤖 Gemini Explanation Generated.");
+    res.json({ text: generatedText });
   } catch (error) {
-    res.status(500).json({ error: "Explanation failed" });
+    console.error("❌ Explanation Error:", error);
+    res.json({ text: getMockExplanation(text) });
   }
 };

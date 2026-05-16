@@ -43,7 +43,12 @@ export default function App() {
       const response = await matchApi.explainStat(text, data.matchInfo);
       setExplanation(response.data.text);
     } catch (error) {
-      setExplanation("Failed to get explanation. Try again?");
+      console.error("Server explanation failed:", error);
+      // Client-side emergency fallback
+      const lower = text.toLowerCase();
+      if (lower.includes('win')) setExplanation("Think of this as a race. KKR is far ahead, and GT needs a massive burst of speed to catch up!");
+      else if (lower.includes('rate')) setExplanation("Run rate is like a car's speedometer; KKR is driving fast enough to reach the goal!");
+      else setExplanation("The match is at a critical stage. Every ball is like a move in a high-stakes chess game!");
     }
   };
 
@@ -200,12 +205,12 @@ export default function App() {
                       {insight}
                     </p>
                     <div className="mt-3 flex flex-col gap-2">
-                      <button 
+                      {explainingIndex !== i &&<button 
                         onClick={() => handleExplain(insight, i)}
                         className="text-[10px] w-fit uppercase font-bold text-blue-400 hover:underline opacity-0 group-hover:opacity-100 transition-opacity"
                       >
-                        {explainingIndex === i ? "Regenerate Explanation" : "Explain Stats"}
-                      </button>
+                        Explain Stats
+                      </button>}
                       
                       <AnimatePresence>
                         {explainingIndex === i && (

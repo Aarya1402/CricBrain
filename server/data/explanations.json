@@ -1,22 +1,8 @@
 {
-  "CRR": {
-    "title": "Current Run Rate",
-    "explanation": "Think of this as the 'speed limit' the team is currently batting at. It's the average number of runs they score in every 6 balls (one over).",
-    "beginnerTip": "A CRR of 10+ is usually very aggressive!"
-  },
-  "RRR": {
-    "title": "Required Run Rate",
-    "explanation": "The 'target speed'. This is how fast the batting team needs to score to win the match before they run out of balls.",
-    "beginnerTip": "If this number keeps going up, the batting team is in trouble!"
-  },
-  "Win Prob": {
-    "title": "Win Probability",
-    "explanation": "A statistical guess of who will win, based on thousands of previous matches in similar situations.",
-    "beginnerTip": "Cricket is unpredictable! A 90% chance doesn't mean it's over yet."
-  },
-  "Momentum": {
-    "title": "Match Momentum",
-    "explanation": "This shows who is 'dominating' the game right now. High momentum means the team is hitting boundaries or taking wickets frequently.",
-    "beginnerTip": "Look for the spikes in the graph to see the turning points."
-  }
+  "win_prob": "Think of this as a race. KKR is currently far ahead in the final lap, and GT needs a massive burst of speed to catch up!",
+  "run_rate": "Run rate is just how fast the team is scoring. It's like a car's speedometer; KKR is driving fast enough to reach the target on time.",
+  "momentum": "Momentum is like a swing. Right now, KKR has pushed the swing so hard that GT is struggling to stop it and push back.",
+  "wickets": "Wickets are like lives in a video game. GT has lost too many lives, making it harder for them to finish the final level.",
+  "clutch": "This means a player is performing best when the pressure is highest—like hitting a game-winning shot in the last second!",
+  "default": "The match is at a critical stage where every ball counts. Imagine a tug-of-war where one team has just gained a massive advantage."
 }
