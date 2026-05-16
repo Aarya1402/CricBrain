@@ -1,0 +1,17 @@
+{
+  "insights": [
+    {
+      "title": "Win Probability Shift",
+      "content": "The win probability for KKR has spiked from 45% to {winProb}% following the 16th over. Andre Russell's explosive boundary hitting (SR 280.0) has effectively neutralized Rashid Khan's economic spell earlier in the innings.",
+      "color": "text-blue-400",
+      "type": "momentum"
+    },
+    {
+      "title": "Strategic Leverage",
+      "content": "GT's decision to hold back Mohit Sharma for the final overs has backfired as the set batters (Russell and Rinku) have already found their rhythm. KKR's 'intent-first' approach in the middle overs has forced GT into defensive field placements.",
+      "color": "text-purple-400",
+      "type": "strategy"
+    }
+  ],
+  "verdict": "KKR are the favorites from here. Unless GT can produce two dot balls in the next over, the match is statistically settled."
+}

@@ -1,25 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, RefreshCw, Volume2, Share2, Sparkles } from 'lucide-react';
+import { matchApi } from '../api';
 import summariesData from '../data/aiSummaries.json';
 
 export default function AISummary({ matchData }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [summary, setSummary] = useState('');
   const [vibe, setVibe] = useState('analyst'); // 'analyst' or 'fanatic'
+  const [allSummaries, setAllSummaries] = useState(summariesData);
 
-  const generateSummary = (currentVibe = vibe) => {
+  useEffect(() => {
+    const fetchSummaries = async () => {
+      try {
+        const response = await matchApi.getSummaries();
+        setAllSummaries(response.data);
+      } catch (error) {
+        console.error("Error fetching summaries:", error);
+      }
+    };
+    fetchSummaries();
+  }, []);
+
+  const generateSummary = async (currentVibe = vibe) => {
     setIsGenerating(true);
-    setTimeout(() => {
-      const currentSummaries = summariesData[currentVibe];
+    try {
+      const response = await matchApi.generateAICommentary(currentVibe, matchData);
+      setSummary(response.data.text);
+    } catch (error) {
+      console.error("Error generating AI summary:", error);
+      const currentSummaries = allSummaries[currentVibe];
       setSummary(currentSummaries[Math.floor(Math.random() * currentSummaries.length)]);
+    } finally {
       setIsGenerating(false);
-    }, 1500);
+    }
   };
 
   useEffect(() => {
-    generateSummary();
-  }, []);
+    if (allSummaries) {
+      generateSummary(vibe);
+    }
+  }, [allSummaries]);
 
   const handleVibeChange = (newVibe) => {
     setVibe(newVibe);
@@ -39,8 +60,14 @@ export default function AISummary({ matchData }) {
             CricBrain {isFanatic ? 'Fanatic' : 'AI Summary'}
           </h3>
         </div>
-        
-        {/* Vibe Toggle */}
+
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => generateSummary(vibe)}
+            className={`p-1.5 hover:bg-white/10 rounded-md transition-all ${isGenerating ? 'animate-spin text-blue-400' : 'text-slate-400'}`}
+          >
+            <RefreshCw size={14} />
+          </button>
         <div className="flex bg-black/40 p-1 rounded-lg border border-white/10 scale-90 sm:scale-100">
           <button 
             onClick={() => handleVibeChange('analyst')}
@@ -60,8 +87,9 @@ export default function AISummary({ matchData }) {
           </button>
         </div>
       </div>
+    </div>
 
-      <div className="p-6 relative min-h-[160px] flex flex-col justify-center">
+    <div className="p-6 relative min-h-[160px] flex flex-col justify-center">
         <AnimatePresence mode="wait">
           {isGenerating ? (
             <motion.div 
@@ -103,9 +131,7 @@ export default function AISummary({ matchData }) {
       {/* Social Footer */}
       <div className="px-6 py-3 bg-blue-500/5 border-t border-white/5 flex items-center justify-between">
         <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Live Commentary Stream</span>
-        <button className="flex items-center gap-1.5 text-[10px] font-bold hover:text-blue-400 transition-colors uppercase">
-          <Share2 size={12} /> Share Summary
-        </button>
+        
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Brain, TrendingUp, Target } from 'lucide-react';
+import { matchApi } from '../api';
 import insightsData from '../data/aiInsights.json';
 
 const TypewriterText = ({ text, delay = 20 }) => {
@@ -21,16 +22,25 @@ const TypewriterText = ({ text, delay = 20 }) => {
 
 export default function AIInsightModal({ isOpen, onClose, matchData }) {
   const [isGenerating, setIsGenerating] = useState(true);
+  const [allInsights, setAllInsights] = useState(insightsData);
 
   useEffect(() => {
-    if (isOpen) {
+    const fetchInsights = async () => {
+      if (!isOpen) return;
       setIsGenerating(true);
-      const timer = setTimeout(() => setIsGenerating(false), 1500);
-      return () => clearTimeout(timer);
-    }
+      try {
+        const response = await matchApi.generateAIInsights(matchData);
+        setAllInsights(response.data);
+      } catch (error) {
+        console.error("Error fetching insights:", error);
+      } finally {
+        setIsGenerating(false);
+      }
+    };
+    fetchInsights();
   }, [isOpen]);
 
-  const insights = insightsData.insights.map(item => ({
+  const insights = allInsights.insights.map(item => ({
     ...item,
     icon: item.type === 'momentum' ? TrendingUp : Target,
     content: item.content.replace('{winProb}', matchData.winProbability.batting)
@@ -112,7 +122,7 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
                   >
                     <p className="text-xs text-blue-400 font-bold mb-2 uppercase tracking-tighter italic">AI Verdict</p>
                     <p className="text-sm italic text-slate-400">
-                      "{insightsData.verdict}"
+                      "{allInsights.verdict}"
                     </p>
                   </motion.div>
                 </div>

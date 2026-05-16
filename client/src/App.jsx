@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Activity, Zap, TrendingUp, Info, Menu, Share2, Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import mockData from './data/mockMatch.json';
 import AIInsightModal from './components/AIInsightModal';
 import TermExplainer from './components/TermExplainer';
 import PlayerCard from './components/PlayerCard';
 import AISummary from './components/AISummary';
+import { useMatchData } from './hooks/useMatchData';
 
 const GlassCard = ({ children, className = "" }) => (
   <motion.div 
@@ -31,8 +31,26 @@ const StatBadge = ({ icon: Icon, label, value, color = "text-blue-400" }) => (
 );
 
 export default function App() {
-  const [data, setData] = useState(mockData);
+  const { data, loading } = useMatchData();
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [explainingIndex, setExplainingIndex] = useState(null);
+  const [explanation, setExplanation] = useState("");
+
+  const handleExplain = async (text, index) => {
+    setExplainingIndex(index);
+    setExplanation("CricBrain is thinking...");
+    try {
+      const response = await matchApi.explainStat(text, data.matchInfo);
+      setExplanation(response.data.text);
+    } catch (error) {
+      console.error("Server explanation failed:", error);
+      // Client-side emergency fallback
+      const lower = text.toLowerCase();
+      if (lower.includes('win')) setExplanation("Think of this as a race. KKR is far ahead, and GT needs a massive burst of speed to catch up!");
+      else if (lower.includes('rate')) setExplanation("Run rate is like a car's speedometer; KKR is driving fast enough to reach the goal!");
+      else setExplanation("The match is at a critical stage. Every ball is like a move in a high-stakes chess game!");
+    }
+  };
 
   return (
     <div className="min-h-screen text-slate-100 font-sans selection:bg-blue-500/30">
@@ -48,13 +66,7 @@ export default function App() {
         </div>
         
         <div className="flex items-center gap-4">
-          <button className="p-2 hover:bg-white/5 rounded-full transition-colors relative">
-            <Bell size={20} />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-background"></span>
-          </button>
-          <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
-            <Menu size={20} />
-          </button>
+          
         </div>
       </nav>
 
@@ -71,12 +83,7 @@ export default function App() {
           </div>
           
           <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg font-medium transition-all shadow-lg shadow-blue-500/20">
-              <Share2 size={16} /> Share
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg font-medium transition-all">
-              <Info size={16} /> Match Info
-            </button>
+           
           </div>
         </div>
 
@@ -127,10 +134,7 @@ export default function App() {
                   Momentum Timeline
                 </h3>
               </TermExplainer>
-              <select className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs outline-none">
-                <option>Full Match</option>
-                <option>Last 10 Overs</option>
-              </select>
+              
             </div>
             <div className="flex-1 w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -186,10 +190,28 @@ export default function App() {
                     <p className="text-sm leading-relaxed text-slate-300">
                       {insight}
                     </p>
-                    <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="text-[10px] uppercase font-bold text-blue-400 hover:underline">
+                    <div className="mt-3 flex flex-col gap-2">
+                      {explainingIndex !== i &&<button 
+                        onClick={() => handleExplain(insight, i)}
+                        className="text-[10px] w-fit uppercase font-bold text-blue-400 hover:underline opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
                         Explain Stats
-                      </button>
+                      </button>}
+                      
+                      <AnimatePresence>
+                        {explainingIndex === i && (
+                          <motion.div 
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="p-3 bg-blue-500/10 rounded-lg border border-blue-500/20 text-xs text-blue-300 italic">
+                              "{explanation}"
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </motion.div>
                 ))}
