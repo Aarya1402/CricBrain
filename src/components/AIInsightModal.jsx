@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Brain, TrendingUp, Target } from 'lucide-react';
+import insightsData from '../data/aiInsights.json';
 
 const TypewriterText = ({ text, delay = 20 }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -29,20 +30,11 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
     }
   }, [isOpen]);
 
-  const insights = [
-    {
-      title: "Win Probability Shift",
-      icon: TrendingUp,
-      content: `The win probability for KKR has spiked from 45% to ${matchData.winProbability.batting}% following the 16th over. Andre Russell's explosive boundary hitting (SR 280.0) has effectively neutralized Rashid Khan's economic spell earlier in the innings.`,
-      color: "text-blue-400"
-    },
-    {
-      title: "Strategic Leverage",
-      icon: Target,
-      content: "GT's decision to hold back Mohit Sharma for the final overs has backfired as the set batters (Russell and Rinku) have already found their rhythm. KKR's 'intent-first' approach in the middle overs has forced GT into defensive field placements.",
-      color: "text-purple-400"
-    }
-  ];
+  const insights = insightsData.insights.map(item => ({
+    ...item,
+    icon: item.type === 'momentum' ? TrendingUp : Target,
+    content: item.content.replace('{winProb}', matchData.winProbability.batting)
+  }));
 
   return (
     <AnimatePresence>
@@ -120,7 +112,7 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
                   >
                     <p className="text-xs text-blue-400 font-bold mb-2 uppercase tracking-tighter italic">AI Verdict</p>
                     <p className="text-sm italic text-slate-400">
-                      "KKR are the favorites from here. Unless GT can produce two dot balls in the next over, the match is statistically settled."
+                      "{insightsData.verdict}"
                     </p>
                   </motion.div>
                 </div>

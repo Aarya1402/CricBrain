@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, RefreshCw, Volume2, Share2, Sparkles } from 'lucide-react';
+import summariesData from '../data/aiSummaries.json';
 
 export default function AISummary({ matchData }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [summary, setSummary] = useState('');
+  const [vibe, setVibe] = useState('analyst'); // 'analyst' or 'fanatic'
 
-  const generateSummary = () => {
+  const generateSummary = (currentVibe = vibe) => {
     setIsGenerating(true);
-    // Simulate AI thinking
     setTimeout(() => {
-      const summaries = [
-        `What a turnaround at the Eden Gardens! KKR looked down and out after Rashid Khan's double strike in the middle overs, but the 'Russell Storm' has completely shifted the momentum. With 15 needed off 16 balls and two set finishers at the crease, the win probability has swung 30% in KKR's favor in just the last 12 deliveries.`,
-        `KKR's aggressive approach against pace is paying dividends. Despite GT's disciplined bowling earlier, the pressure of the death overs is starting to show. Andre Russell's 42 off 15 is one of the highest impact cameos of the season so far, leaving GT's captain needing a tactical masterclass to pull this back.`,
-        `The narrative of the match changed the moment KKR decided to target the 16th over. From a required rate of nearly 10, they've brought it down to a manageable 5.63. Rashid Khan's spell is over, and GT's secondary bowlers now face the daunting task of stopping a rampant Rinku and Russell.`
-      ];
-      setSummary(summaries[Math.floor(Math.random() * summaries.length)]);
+      const currentSummaries = summariesData[currentVibe];
+      setSummary(currentSummaries[Math.floor(Math.random() * currentSummaries.length)]);
       setIsGenerating(false);
     }, 1500);
   };
@@ -24,22 +21,42 @@ export default function AISummary({ matchData }) {
     generateSummary();
   }, []);
 
+  const handleVibeChange = (newVibe) => {
+    setVibe(newVibe);
+    generateSummary(newVibe);
+  };
+
+  const isFanatic = vibe === 'fanatic';
+
   return (
-    <div className="glass-card bg-slate-900/40 border-white/5 overflow-hidden">
+    <div className={`glass-card transition-all duration-500 overflow-hidden ${
+      isFanatic ? 'bg-purple-900/20 border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.2)]' : 'bg-slate-900/40 border-white/5'
+    }`}>
       <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <MessageSquare className="text-blue-400" size={18} />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-200">AI Match Summary</h3>
+          <MessageSquare className={isFanatic ? 'text-purple-400' : 'text-blue-400'} size={18} />
+          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-200">
+            CricBrain {isFanatic ? 'Fanatic' : 'AI Summary'}
+          </h3>
         </div>
-        <div className="flex gap-2">
+        
+        {/* Vibe Toggle */}
+        <div className="flex bg-black/40 p-1 rounded-lg border border-white/10 scale-90 sm:scale-100">
           <button 
-            onClick={generateSummary}
-            className={`p-1.5 hover:bg-white/10 rounded-md transition-all ${isGenerating ? 'animate-spin' : ''}`}
+            onClick={() => handleVibeChange('analyst')}
+            className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${
+              !isFanatic ? 'bg-blue-500 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'
+            }`}
           >
-            <RefreshCw size={14} />
+            ANALYST
           </button>
-          <button className="p-1.5 hover:bg-white/10 rounded-md transition-all">
-            <Volume2 size={14} />
+          <button 
+            onClick={() => handleVibeChange('fanatic')}
+            className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${
+              isFanatic ? 'bg-purple-500 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            FANATIC
           </button>
         </div>
       </div>
@@ -52,10 +69,12 @@ export default function AISummary({ matchData }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-3 text-blue-400/60"
+              className="flex items-center gap-3"
             >
-              <Sparkles className="animate-pulse" size={20} />
-              <p className="text-sm font-medium animate-pulse italic">CricBrain AI is processing match dynamics...</p>
+              <Sparkles className={`animate-pulse ${isFanatic ? 'text-purple-400' : 'text-blue-400'}`} size={20} />
+              <p className={`text-sm font-medium animate-pulse italic ${isFanatic ? 'text-purple-300' : 'text-blue-400/60'}`}>
+                {isFanatic ? 'Getting hyped for the chase...' : 'CricBrain AI is processing match dynamics...'}
+              </p>
             </motion.div>
           ) : (
             <motion.div
@@ -64,7 +83,7 @@ export default function AISummary({ matchData }) {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-4"
             >
-              <p className="text-sm leading-relaxed text-slate-300 font-medium italic">
+              <p className={`text-sm leading-relaxed font-medium italic ${isFanatic ? 'text-slate-100' : 'text-slate-300'}`}>
                 "{summary}"
               </p>
               <div className="flex items-center gap-4 pt-2">
