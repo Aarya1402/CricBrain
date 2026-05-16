@@ -22,18 +22,32 @@ export default function AISummary({ matchData }) {
     fetchSummaries();
   }, []);
 
-  const generateSummary = (currentVibe = vibe, data = allSummaries) => {
+  const generateSummary = async (currentVibe = vibe) => {
     setIsGenerating(true);
-    setTimeout(() => {
-      const currentSummaries = data[currentVibe];
+    try {
+      const response = await fetch('http://localhost:5000/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          vibe: currentVibe,
+          context: matchData 
+        })
+      });
+      const json = await response.json();
+      setSummary(json.text);
+    } catch (error) {
+      console.error("Error generating AI summary:", error);
+      // Local fallback if server fails
+      const currentSummaries = allSummaries[currentVibe];
       setSummary(currentSummaries[Math.floor(Math.random() * currentSummaries.length)]);
+    } finally {
       setIsGenerating(false);
-    }, 1500);
+    }
   };
 
   useEffect(() => {
     if (allSummaries) {
-      generateSummary(vibe, allSummaries);
+      generateSummary(vibe);
     }
   }, [allSummaries]);
 
@@ -55,8 +69,14 @@ export default function AISummary({ matchData }) {
             CricBrain {isFanatic ? 'Fanatic' : 'AI Summary'}
           </h3>
         </div>
-        
-        {/* Vibe Toggle */}
+
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => generateSummary(vibe)}
+            className={`p-1.5 hover:bg-white/10 rounded-md transition-all ${isGenerating ? 'animate-spin text-blue-400' : 'text-slate-400'}`}
+          >
+            <RefreshCw size={14} />
+          </button>
         <div className="flex bg-black/40 p-1 rounded-lg border border-white/10 scale-90 sm:scale-100">
           <button 
             onClick={() => handleVibeChange('analyst')}
@@ -76,8 +96,9 @@ export default function AISummary({ matchData }) {
           </button>
         </div>
       </div>
+    </div>
 
-      <div className="p-6 relative min-h-[160px] flex flex-col justify-center">
+    <div className="p-6 relative min-h-[160px] flex flex-col justify-center">
         <AnimatePresence mode="wait">
           {isGenerating ? (
             <motion.div 
