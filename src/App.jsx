@@ -4,6 +4,8 @@ import { Activity, Zap, TrendingUp, Info, Menu, Share2, Bell } from 'lucide-reac
 import { motion, AnimatePresence } from 'framer-motion';
 import mockData from './data/mockMatch.json';
 import AIInsightModal from './components/AIInsightModal';
+import TermExplainer from './components/TermExplainer';
+import PlayerCard from './components/PlayerCard';
 
 const GlassCard = ({ children, className = "" }) => (
   <motion.div 
@@ -100,9 +102,17 @@ export default function App() {
             </div>
           </GlassCard>
 
-          <StatBadge icon={TrendingUp} label="Current RR" value={data.liveStats.currentRunRate} />
-          <StatBadge icon={Zap} label="Required RR" value={data.liveStats.requiredRunRate} color="text-amber-400" />
-          <StatBadge icon={Activity} label="Win Prob" value={`${data.matchInfo.winProbability.batting}%`} color="text-green-400" />
+          <TermExplainer term="CRR">
+            <StatBadge icon={TrendingUp} label="Current RR" value={data.liveStats.currentRunRate} />
+          </TermExplainer>
+          
+          <TermExplainer term="RRR">
+            <StatBadge icon={Zap} label="Required RR" value={data.liveStats.requiredRunRate} color="text-amber-400" />
+          </TermExplainer>
+          
+          <TermExplainer term="Win Prob">
+            <StatBadge icon={Activity} label="Win Prob" value={`${data.matchInfo.winProbability.batting}%`} color="text-green-400" />
+          </TermExplainer>
         </div>
 
         {/* Main Content Area */}
@@ -110,10 +120,12 @@ export default function App() {
           {/* Momentum Chart */}
           <GlassCard className="lg:col-span-2 min-h-[400px] flex flex-col">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold flex items-center gap-2">
-                <TrendingUp className="text-blue-400" size={20} />
-                Momentum Timeline
-              </h3>
+              <TermExplainer term="Momentum">
+                <h3 className="text-lg font-bold flex items-center gap-2 hover:text-blue-400 transition-colors">
+                  <TrendingUp className="text-blue-400" size={20} />
+                  Momentum Timeline
+                </h3>
+              </TermExplainer>
               <select className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs outline-none">
                 <option>Full Match</option>
                 <option>Last 10 Overs</option>
@@ -187,6 +199,23 @@ export default function App() {
               Generate Deep Dive
             </button>
           </GlassCard>
+        </div>
+
+        {/* Key Players Section */}
+        <div className="space-y-4 pt-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <Zap className="text-amber-400" size={24} />
+              Key Match Performers
+            </h3>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Dynamic Impact Ratings</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.players.map((player, i) => (
+              <PlayerCard key={i} player={player} />
+            ))}
+          </div>
         </div>
       </main>
 

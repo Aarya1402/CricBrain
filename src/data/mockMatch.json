@@ -40,6 +40,35 @@
     { "over": 15, "score": 154, "wickets": 3, "momentum": 90, "event": "Russell Storm" },
     { "over": 17, "score": 180, "wickets": 4, "momentum": 85, "event": "Rinku Finishing" }
   ],
+  "players": [
+    {
+      "name": "Andre Russell",
+      "team": "KKR",
+      "stats": "42(15)",
+      "impact": 9.8,
+      "role": "Finisher",
+      "status": "Batting",
+      "image": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320/lsci/db/PICTURES/CMS/321800/321871.png"
+    },
+    {
+      "name": "Rashid Khan",
+      "team": "GT",
+      "stats": "2/24 (4)",
+      "impact": 8.5,
+      "role": "Spinner",
+      "status": "Bowling",
+      "image": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320/lsci/db/PICTURES/CMS/321300/321360.png"
+    },
+    {
+      "name": "Rinku Singh",
+      "team": "KKR",
+      "stats": "18*(12)",
+      "impact": 7.2,
+      "role": "Finisher",
+      "status": "Batting",
+      "image": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320/lsci/db/PICTURES/CMS/321800/321873.png"
+    }
+  ],
   "aiInsights": [
     "Andre Russell's 42 off 15 balls has turned the match on its head at the Eden Gardens.",
     "Rashid Khan was the only bowler who managed to keep the run rate under control during the middle overs.",
