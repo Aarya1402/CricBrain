@@ -6,6 +6,7 @@ import mockData from './data/mockMatch.json';
 import AIInsightModal from './components/AIInsightModal';
 import TermExplainer from './components/TermExplainer';
 import PlayerCard from './components/PlayerCard';
+import AISummary from './components/AISummary';
 
 const GlassCard = ({ children, className = "" }) => (
   <motion.div 
@@ -160,8 +161,11 @@ export default function App() {
             </div>
           </GlassCard>
 
-          {/* AI Insights Card */}
-          <GlassCard className="flex flex-col bg-blue-500/5 border-blue-500/20">
+          {/* AI Insights Column */}
+          <div className="space-y-6">
+            <AISummary matchData={data.matchInfo} />
+            
+            <GlassCard className="flex flex-col bg-blue-500/5 border-blue-500/20">
             <div className="flex items-center gap-2 mb-4 text-blue-400">
               <div className="p-2 bg-blue-500/10 rounded-lg">
                 <Zap size={20} />
@@ -200,8 +204,9 @@ export default function App() {
             </button>
           </GlassCard>
         </div>
+      </div>
 
-        {/* Key Players Section */}
+      {/* Key Players Section */}
         <div className="space-y-4 pt-6">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold flex items-center gap-2">
