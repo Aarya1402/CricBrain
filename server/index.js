@@ -26,13 +26,26 @@ app.get('/api/summaries', (req, res) => res.json(summariesData));
 // Real-time AI Commentary Generation
 app.post('/api/ai/generate', async (req, res) => {
   const { vibe, context } = req.body;
+  
   if (!genAI) {
     const currentSummaries = summariesData[vibe || 'analyst'];
     return res.json({ text: currentSummaries[Math.floor(Math.random() * currentSummaries.length)] });
   }
+
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const prompt = `Match Context: ${JSON.stringify(context)}. Vibe: ${vibe}. Generate a 2-sentence flashy match summary.`;
+    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
+    
+    const prompt = `
+      Match Stats: ${JSON.stringify(context)}
+      Persona: ${vibe === 'fanatic' ? 'A die-hard, hyper-enthusiastic KKR fan who uses emojis and slang' : 'A professional, calm, data-driven sports analyst'}
+      
+      Task: Write a 2-3 sentence commentary on the current match situation.
+      - If Analyst: Focus on run rates, win probability, and technical execution.
+      - If Fanatic: Focus on the "vibe", momentum, and pure excitement. Use words like "MASSIVE", "CLUTCH", "VIBES".
+      
+      Keep it punchy and broadcast-ready.
+    `;
+
     const result = await model.generateContent(prompt);
     res.json({ text: result.response.text() });
   } catch (error) {
@@ -48,7 +61,7 @@ app.post('/api/ai/insights', async (req, res) => {
 
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-3.1-flash-lite",
       generationConfig: { responseMimeType: "application/json" }
     });
     const prompt = `Analyze: ${JSON.stringify(context)}. Return JSON: { insights: [{title, content, color, type}], verdict: string }. Types: momentum, strategy.`;
