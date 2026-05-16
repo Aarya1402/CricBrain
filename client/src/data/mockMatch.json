@@ -1,0 +1,77 @@
+{
+  "matchInfo": {
+    "title": "IPL 2024: KKR vs GT",
+    "teams": {
+      "batting": {
+        "name": "Kolkata Knight Riders",
+        "shortName": "KKR",
+        "score": 182,
+        "wickets": 4,
+        "overs": 17.2,
+        "color": "#3A225D"
+      },
+      "bowling": {
+        "name": "Gujarat Titans",
+        "shortName": "GT",
+        "score": 178,
+        "wickets": 10,
+        "overs": 20.0,
+        "color": "#1B2133"
+      }
+    },
+    "status": "KKR needs 15 runs from 16 balls",
+    "winProbability": {
+      "batting": 78,
+      "bowling": 22
+    }
+  },
+  "liveStats": {
+    "currentRunRate": 10.5,
+    "requiredRunRate": 5.63,
+    "lastFiveOvers": [12, 18, 14, 9, 22],
+    "boundaries": {
+      "fours": 18,
+      "sixes": 12
+    }
+  },
+  "momentumTimeline": [
+    { "over": 5, "score": 45, "wickets": 1, "momentum": 55, "event": "Narine Blitz" },
+    { "over": 10, "score": 92, "wickets": 2, "momentum": 40, "event": "Rashid tightens" },
+    { "over": 15, "score": 154, "wickets": 3, "momentum": 90, "event": "Russell Storm" },
+    { "over": 17, "score": 180, "wickets": 4, "momentum": 85, "event": "Rinku Finishing" }
+  ],
+  "players": [
+    {
+      "name": "Andre Russell",
+      "team": "KKR",
+      "stats": "42(15)",
+      "impact": 9.8,
+      "role": "Finisher",
+      "status": "Batting",
+      "image": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320/lsci/db/PICTURES/CMS/321800/321871.png"
+    },
+    {
+      "name": "Rashid Khan",
+      "team": "GT",
+      "stats": "2/24 (4)",
+      "impact": 8.5,
+      "role": "Spinner",
+      "status": "Bowling",
+      "image": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320/lsci/db/PICTURES/CMS/321300/321360.png"
+    },
+    {
+      "name": "Rinku Singh",
+      "team": "KKR",
+      "stats": "18*(12)",
+      "impact": 7.2,
+      "role": "Finisher",
+      "status": "Batting",
+      "image": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320/lsci/db/PICTURES/CMS/321800/321873.png"
+    }
+  ],
+  "aiInsights": [
+    "Andre Russell's 42 off 15 balls has turned the match on its head at the Eden Gardens.",
+    "Rashid Khan was the only bowler who managed to keep the run rate under control during the middle overs.",
+    "The momentum shifted decisively towards KKR in the 16th over where they picked up 22 runs."
+  ]
+}
