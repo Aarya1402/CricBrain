@@ -23,35 +23,40 @@ app.get('/api/match-data', (req, res) => res.json(matchData));
 app.get('/api/insights', (req, res) => res.json(insightsData));
 app.get('/api/summaries', (req, res) => res.json(summariesData));
 
-// Real-time AI Generation Route
+// Real-time AI Commentary Generation
 app.post('/api/ai/generate', async (req, res) => {
   const { vibe, context } = req.body;
-  
   if (!genAI) {
-    // Fallback to mock data if no API key
     const currentSummaries = summariesData[vibe || 'analyst'];
     return res.json({ text: currentSummaries[Math.floor(Math.random() * currentSummaries.length)] });
   }
-
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
-    
-    const prompt = `
-      You are an expert cricket analyst and commentator. 
-      Context: ${JSON.stringify(context)}
-      Vibe: ${vibe === 'fanatic' ? 'Passionate, hyped, slightly biased fan with emojis' : 'Professional, statistical, broadcast-quality analyst'}
-      
-      Task: Generate a short, 2-3 sentence match summary based on the current data. 
-      Focus on momentum shifts and key players.
-      Keep it punchy and engaging.
-    `;
-
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = `Match Context: ${JSON.stringify(context)}. Vibe: ${vibe}. Generate a 2-sentence flashy match summary.`;
     const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    res.json({ text });
+    res.json({ text: result.response.text() });
   } catch (error) {
     console.error("Gemini Error:", error);
     res.status(500).json({ error: "Failed to generate AI content" });
+  }
+});
+
+// Real-time AI Deep Dive Insights
+app.post('/api/ai/insights', async (req, res) => {
+  const { context } = req.body;
+  if (!genAI) return res.json(insightsData);
+
+  try {
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      generationConfig: { responseMimeType: "application/json" }
+    });
+    const prompt = `Analyze: ${JSON.stringify(context)}. Return JSON: { insights: [{title, content, color, type}], verdict: string }. Types: momentum, strategy.`;
+    const result = await model.generateContent(prompt);
+    res.json(JSON.parse(result.response.text()));
+  } catch (error) {
+    console.error("Insights Error:", error);
+    res.json(insightsData);
   }
 });
 

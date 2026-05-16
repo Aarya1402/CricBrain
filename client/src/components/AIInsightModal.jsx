@@ -25,23 +25,23 @@ export default function AIInsightModal({ isOpen, onClose, matchData }) {
 
   useEffect(() => {
     const fetchInsights = async () => {
+      if (!isOpen) return;
+      setIsGenerating(true);
       try {
-        const response = await fetch('http://localhost:5000/api/insights');
+        const response = await fetch('http://localhost:5000/api/ai/insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ context: matchData })
+        });
         const json = await response.json();
         setAllInsights(json);
       } catch (error) {
         console.error("Error fetching insights:", error);
+      } finally {
+        setIsGenerating(false);
       }
     };
     fetchInsights();
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsGenerating(true);
-      const timer = setTimeout(() => setIsGenerating(false), 1500);
-      return () => clearTimeout(timer);
-    }
   }, [isOpen]);
 
   const insights = allInsights.insights.map(item => ({
