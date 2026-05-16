@@ -12,6 +12,7 @@ export const matchApi = {
   getSummaries: () => api.get('/summaries'),
   generateAICommentary: (vibe, context) => api.post('/ai/generate', { vibe, context }),
   generateAIInsights: (context) => api.post('/ai/insights', { context }),
+  explainStat: (text, context) => api.post('/ai/explain', { text, context }),
 };
 
 export default api;

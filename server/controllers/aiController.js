@@ -43,3 +43,23 @@ exports.generateInsights = async (req, res) => {
     res.json(insightsData);
   }
 };
+
+exports.generateExplanation = async (req, res) => {
+  const { text, context } = req.body;
+  if (!genAI) return res.json({ text: "Stat explanation unavailable in offline mode." });
+
+  try {
+    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+    const prompt = `
+      Match Context: ${JSON.stringify(context)}
+      Specific Insight: "${text}"
+      
+      Task: Explain this technical cricket insight like I'm 5 years old. 
+      Keep it very simple, short (1-2 sentences), and use an analogy if possible.
+    `;
+    const result = await model.generateContent(prompt);
+    res.json({ text: result.response.text() });
+  } catch (error) {
+    res.status(500).json({ error: "Explanation failed" });
+  }
+};

@@ -13,5 +13,6 @@ router.get('/summaries', (req, res) => res.json(summariesData));
 // AI Routes
 router.post('/ai/generate', aiController.generateCommentary);
 router.post('/ai/insights', aiController.generateInsights);
+router.post('/ai/explain', aiController.generateExplanation);
 
 module.exports = router;

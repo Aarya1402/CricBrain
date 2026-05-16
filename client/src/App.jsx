@@ -33,6 +33,19 @@ const StatBadge = ({ icon: Icon, label, value, color = "text-blue-400" }) => (
 export default function App() {
   const { data, loading } = useMatchData();
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [explainingIndex, setExplainingIndex] = useState(null);
+  const [explanation, setExplanation] = useState("");
+
+  const handleExplain = async (text, index) => {
+    setExplainingIndex(index);
+    setExplanation("CricBrain is thinking...");
+    try {
+      const response = await matchApi.explainStat(text, data.matchInfo);
+      setExplanation(response.data.text);
+    } catch (error) {
+      setExplanation("Failed to get explanation. Try again?");
+    }
+  };
 
   return (
     <div className="min-h-screen text-slate-100 font-sans selection:bg-blue-500/30">
@@ -186,10 +199,28 @@ export default function App() {
                     <p className="text-sm leading-relaxed text-slate-300">
                       {insight}
                     </p>
-                    <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="text-[10px] uppercase font-bold text-blue-400 hover:underline">
-                        Explain Stats
+                    <div className="mt-3 flex flex-col gap-2">
+                      <button 
+                        onClick={() => handleExplain(insight, i)}
+                        className="text-[10px] w-fit uppercase font-bold text-blue-400 hover:underline opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        {explainingIndex === i ? "Regenerate Explanation" : "Explain Stats"}
                       </button>
+                      
+                      <AnimatePresence>
+                        {explainingIndex === i && (
+                          <motion.div 
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="p-3 bg-blue-500/10 rounded-lg border border-blue-500/20 text-xs text-blue-300 italic">
+                              "{explanation}"
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </motion.div>
                 ))}
